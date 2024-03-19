@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Functions>
+	<Function Name="Bet Count">
+		<Setting Key="Acc_Rpt_Betcount_Platform_Site" SpName="Acc_Rpt_Betcount_Platform_Site" DbName="DBWH.bodb_dwrs.wsv_nap" TimeOut="0" />
+	</Function>
+</Functions>

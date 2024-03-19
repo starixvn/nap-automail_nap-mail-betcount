@@ -7,8 +7,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="App_Data\DBWH.bodb_dwrs.bodbAdminNet.xml" />
 	  <None Remove="App_Data\DBWH.bodb_dwrs.dwrs.xml" />
+	  <None Remove="App_Data\DBWH.bodb_dwrs.wsv_nap.xml" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -26,7 +26,7 @@
     <Content Include="App_Data\DBWH.bodb_dwrs.dwrs.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="App_Data\DBWH.bodb_dwrs.bodbAdminNet.xml">
+    <Content Include="App_Data\DBWH.bodb_dwrs.wsv_nap.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Properties\launchSettings.json" />
