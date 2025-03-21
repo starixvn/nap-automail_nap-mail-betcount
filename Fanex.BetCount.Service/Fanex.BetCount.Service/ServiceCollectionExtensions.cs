@@ -14,15 +14,17 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using LetstalkConfig = Fanex.LetstalkService.Core.Services.AppConfigService;
+using LetstalkConfig = Fanex.LetstalkService.Client.AppConfigService;
 
 namespace Fanex.BetCount.Service;
+
+using AppConfigService = Business.Services.AppConfigService;
 
 public static class ServiceCollectionExtensions
 {
     public static IServiceCollection Services { get; set; }
 
-    public static void LoadConfiguration(this IServiceCollection services)
+    public static void AddConfig(this IServiceCollection services)
     {
         Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
         var text = File.ReadAllText("appsettings.json");
@@ -30,40 +32,7 @@ public static class ServiceCollectionExtensions
         LetstalkConfig.Config.LetstalkServiceApi = AppConfigService.Config.LetstalkServiceApi;
     }
 
-    public static void SentryRegister(this IServiceCollection services)
-    {
-        var sentry = new SentryLogging(new SentryEngineOptions
-        {
-            Dsn = new Dsn(AppConfigService.Config.SentryClientKey)
-        });
-
-        LogManager
-            .SetDefaultLogCategory(AppConfigService.Config.CategorySentryLog)
-            .Use(new List<ILogEngine>
-            {
-                sentry
-            });
-    }
-
-    public static void FanexDataRegister(this IServiceCollection services, IConfiguration config)
-    {
-        var connections = config.GetSection("ConnectionStrings")
-            .GetChildren()
-            .AsEnumerable()
-            .ToDictionary
-            (
-                x => x.Key,
-                y => y.Value
-            );
-
-        DbSettingProviderManager
-            .StartNewSession()
-            .UseConnectionStrings(connections)
-            .UseDefaultDbSettingProvider(config.GetSection("StoredProcedurePath").Value)
-            .Run();
-    }
-
-    public static void InternalServiceRegister(this IServiceCollection services)
+    public static void AddInternalServices(this IServiceCollection services)
     {
         services.AddSingleton<Log, LogImp>();
         services.AddSingleton<IDynamicRepository, DynamicRepository>();
