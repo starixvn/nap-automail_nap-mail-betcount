@@ -1,9 +1,10 @@
 ﻿using Fanex.BetCount.Business.Models;
 using Fanex.LetstalkService.Client;
-using Fanex.LetstalkService.Core.Models;
 using System.Collections.Generic;
 
 namespace Fanex.BetCount.Business.Services;
+
+using LetstalkService.Client.Models;
 
 public interface MessageService
 {
