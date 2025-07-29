@@ -8,5 +8,5 @@ public class BetCountModel
 
     public int Total { get; set; }
 
-    public List<RawData> Platforms { get; set; } = new();
+    public List<RawData> Platforms { get; set; } = [];
 }

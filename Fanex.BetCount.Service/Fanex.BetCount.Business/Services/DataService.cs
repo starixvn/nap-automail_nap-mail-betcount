@@ -13,17 +13,9 @@ public interface DataService
     bool IsDataAvailable();
 }
 
-public class DataServiceImp : DataService
+public class DataServiceImp(IDynamicRepository dynamicRepository, DateService dateService)
+    : DataService
 {
-    private readonly IDynamicRepository dynamicRepository;
-    private readonly DateService dateService;
-
-    public DataServiceImp(IDynamicRepository dynamicRepository, DateService dateService)
-    {
-        this.dynamicRepository = dynamicRepository;
-        this.dateService = dateService;
-    }
-
     public bool IsDataAvailable()
     {
         if (AppConfigService.Config.IsManual)
@@ -68,6 +60,8 @@ public class DataServiceImp : DataService
             RptDate = dateService.RptDate
         };
 
-        return dynamicRepository.Fetch<RawData>(criteria).ToList();
+        var rawData = dynamicRepository.Fetch<RawData>(criteria).ToList();
+        rawData.ForEach(row => { row.BetCount /= 1000; });
+        return rawData;
     }
 }

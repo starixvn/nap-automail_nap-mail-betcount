@@ -11,19 +11,11 @@ public interface MessageService
     bool Execute(List<BetCountModel> model);
 }
 
-public class MessageServiceImp : MessageService
+public class MessageServiceImp(
+    LetstalkClientService notificationService,
+    MessageContentBuilder messageContentBuilder)
+    : MessageService
 {
-    private readonly LetstalkClientService notificationService;
-    private readonly MessageContentBuilder messageContentBuilder;
-
-    public MessageServiceImp(
-        LetstalkClientService notificationService,
-        MessageContentBuilder messageContentBuilder)
-    {
-        this.notificationService = notificationService;
-        this.messageContentBuilder = messageContentBuilder;
-    }
-
     public bool Execute(List<BetCountModel> model)
     {
         var letstalkModel = new LetstalkModel

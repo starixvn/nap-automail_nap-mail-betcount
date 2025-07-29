@@ -13,15 +13,8 @@ public interface MessageContentBuilder
     string BuildSubject(DateTime rptDate);
 }
 
-public class MessageContentBuilderImp : MessageContentBuilder
+public class MessageContentBuilderImp(FormatNumberService formatService) : MessageContentBuilder
 {
-    private readonly FormatNumberService formatService;
-
-    public MessageContentBuilderImp(FormatNumberService formatService)
-    {
-        this.formatService = formatService;
-    }
-
     private static Dictionary<string, string> TextNeedToReplace => new()
     {
         { "MBC", "C" },
@@ -43,14 +36,15 @@ public class MessageContentBuilderImp : MessageContentBuilder
             var newText = texts.ContainsKey(siteName) ? texts[siteName] : siteName;
             var siteTotal = $"{newText} - TOTAL";
             var totalSpace = AddTotalSpace(siteTotal);
-            array.Add($"{siteTotal}: {totalSpace}{formatService.FormatNumber(site.Total)}");
+            array.Add($"{siteTotal}: {totalSpace}{formatService.CutNumberOff(site.Total)}");
             site.Platforms.ForEach(platform =>
             {
                 var firstSpace = AddFistSpacePlatform(platform.Platform);
                 var secondSpace = AddSecondSpacePlatform(platform.Platform);
                 var percent = Convert.ToDecimal(platform.BetCount) / Convert.ToDecimal(site.Total);
 
-                array.Add($"{firstSpace}{platform.Platform}: {secondSpace}{formatService.FormatNumber(platform.BetCount)} ({percent:#,##0%})");
+                array.Add(
+                    $"{firstSpace}{platform.Platform}: {secondSpace}{formatService.CutNumberOff(platform.BetCount)} ({percent:#,##0%})");
             });
 
             array.Add("--------------------");
@@ -67,7 +61,8 @@ public class MessageContentBuilderImp : MessageContentBuilder
     private string AddFistSpacePlatform(string platform)
     {
         var result = new StringBuilder();
-        var spaceSetting = AppConfigService.Config.PlatformSpaceSettings.FirstOrDefault(s => string.Equals(s.Platform, platform, StringComparison.CurrentCultureIgnoreCase));
+        var spaceSetting = AppConfigService.Config.PlatformSpaceSettings.FirstOrDefault(s =>
+            string.Equals(s.Platform, platform, StringComparison.CurrentCultureIgnoreCase));
         if (spaceSetting == null)
         {
             return result.ToString();
@@ -84,7 +79,8 @@ public class MessageContentBuilderImp : MessageContentBuilder
     private string AddSecondSpacePlatform(string platform)
     {
         var result = new StringBuilder();
-        var spaceSetting = AppConfigService.Config.PlatformSpaceSettings.FirstOrDefault(s => string.Equals(s.Platform, platform, StringComparison.CurrentCultureIgnoreCase));
+        var spaceSetting = AppConfigService.Config.PlatformSpaceSettings.FirstOrDefault(s =>
+            string.Equals(s.Platform, platform, StringComparison.CurrentCultureIgnoreCase));
         if (spaceSetting == null)
         {
             return result.ToString();
@@ -101,7 +97,8 @@ public class MessageContentBuilderImp : MessageContentBuilder
     private string AddTotalSpace(string siteTotal)
     {
         var result = new StringBuilder();
-        var spaceSetting = AppConfigService.Config.TotalSpaceSettings.FirstOrDefault(s => string.Equals(s.SiteTotal, siteTotal, StringComparison.CurrentCultureIgnoreCase));
+        var spaceSetting = AppConfigService.Config.TotalSpaceSettings.FirstOrDefault(s =>
+            string.Equals(s.SiteTotal, siteTotal, StringComparison.CurrentCultureIgnoreCase));
         if (spaceSetting == null)
         {
             return result.ToString();

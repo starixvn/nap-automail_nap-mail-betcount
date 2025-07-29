@@ -6,15 +6,8 @@ namespace Fanex.BetCount.Service.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class ExecuteController : ControllerBase
+public class ExecuteController(MainService mainService) : ControllerBase
 {
-    private readonly MainService mainService;
-
-    public ExecuteController(MainService mainService)
-    {
-        this.mainService = mainService;
-    }
-
     [HttpGet]
     public JobMessage Get()
     {

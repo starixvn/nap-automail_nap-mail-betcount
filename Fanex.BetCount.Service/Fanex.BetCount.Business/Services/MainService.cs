@@ -9,22 +9,12 @@ public interface MainService
     JobMessage Execute();
 }
 
-public class MainServiceImp : MainService
+public class MainServiceImp(
+    Log log,
+    DataService dataService,
+    MessageService messageService)
+    : MainService
 {
-    private readonly Log log;
-    private readonly DataService dataService;
-    private readonly MessageService messageService;
-
-    public MainServiceImp(
-        Log log,
-        DataService dataService,
-        MessageService messageService)
-    {
-        this.log = log;
-        this.dataService = dataService;
-        this.messageService = messageService;
-    }
-
     public JobMessage Execute()
     {
         var result = new ExecuteResultModel();
